@@ -24,6 +24,9 @@ def players():
     players.sort(key=lambda p: p["name"].lower())
     online_set = set(n.lower() for n in online_names)
 
+    # 🔹 obtener datos de conexión
+    online_count, online_names = get_online_players()
+
     return render_template("players.html",
                            players=players,
                            online_count=online_count,
@@ -39,3 +42,4 @@ def player_profile(uuid):
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
