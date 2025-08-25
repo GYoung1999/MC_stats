@@ -40,5 +40,12 @@
       </tbody>
     </table>
   </div>
+  <div class="footer">
+    <p>👥 Jugadores conectados: {{ online_count }}</p>
+    {% if online_names %}
+      <p>Actualmente: {{ online_names|join(', ') }}</p>
+    {% endif %}
+  </div>
 </body>
 </html>
+
