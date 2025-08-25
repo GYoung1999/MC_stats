@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Leaderboard - Minecraft Stats</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <div><strong>🏆 Estadísticas del server</strong></div>
+    <div>
+      <a href="/?sort=Mobs asesinados" class="btn {% if sort=='Mobs asesinados' %}active{% endif %}">Ordenar por Mobs asesinados</a>
+      <a href="/?sort=level" class="btn {% if sort=='level' %}active{% endif %}">Ordenar por Nivel</a>
+      <a href="/?sort=Muertes" class="btn {% if sort=='Muertes' %}active{% endif %}">Ordenar por muertes</a>
+    </div>
+  </div>
+  <div class="container">
+    <table class="card-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Jugador</th>
+          <th>Mobs asesinados</th>
+          <th>Muertes</th>
+          <th>Nivel</th>
+          <th>XP</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in players %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td><a class="link" href="/player/{{ p.uuid }}">{{ p.name }}</a></td>
+          <td>{{ p.mob_kills }}</td>
+          <td>{{ p.deaths }}</td>
+          <td>{{ p.level if p.level else '?' }}</td>
+          <td>{{ p.xp if p.xp else '?' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

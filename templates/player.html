@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ data.name }} - Perfil</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .stat-inline { 
+      display: flex; 
+      flex-wrap: wrap;
+      gap: 12px; 
+      align-items: center; 
+      margin-top: 6px; 
+    }
+    .stat-box { 
+      background: var(--card); 
+      padding: 4px 10px; 
+      border-radius: 6px; 
+      font-size: 0.9rem; 
+      box-shadow: 0 2px 6px rgba(0,0,0,.3);
+    }
+    .xp-bar {
+      width: 220px; 
+      height: 10px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 6px; 
+      overflow: hidden;
+      margin: 0 6px;
+    }
+    .xp-fill {
+      background: linear-gradient(90deg, #4caf50, #81c784);
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+    .xp-label { font-size: 0.8rem; opacity: 0.85; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div><a href="/" class="link">⬅️ Regresar a las Estadísticas del Server</a></div>
+    <div><strong>{{ data.name }}</strong></div>
+  </div>
+
+  <div class="container">
+    <!-- Header con avatar y stats -->
+    <div class="hero">
+      <img src="https://minotar.net/helm/{{ data.name }}/64" alt="avatar" class="avatar" width="64" height="64">
+      <div>
+        <h2>{{ data.name }}</h2>
+        <div class="stat-inline">
+          <div class="stat-box">⚔️ Nivel: {{ data.mod.level_mod or "?" }}</div>
+          <div class="stat-box">❤️ Vida: {{ data.mod.hp or "?" }}</div>
+          <div class="stat-box">⚡ Energía: {{ data.mod.energy or "?" }}</div>
+        </div>
+        <div class="stat-inline">
+          <span class="xp-label">XP:</span>
+          <div class="xp-bar">
+            {% set xp_val = data.mod.xp_mod or 0 %}
+            {% set xp_percent = (xp_val % 1000) / 1000 * 100 %}  {# simplificado: 1000 xp = un nivel #}
+            <div class="xp-fill" style="width: {{ xp_percent }}%"></div>
+          </div>
+          <span class="xp-label">{{ xp_val }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid de stats vanilla compactos -->
+    <div class="grid">
+      <div class="card stat-card">
+        <div class="stat-value">{{ data.vanilla.mob_kills }}</div>
+        <div class="stat-label">Kills</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-value">{{ data.vanilla.deaths }}</div>
+        <div class="stat-label">Muertes</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-value">{{ data.vanilla.play_time_hms }}</div>
+        <div class="stat-label">Tiempo Jugado</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-value">{{ data.vanilla.jumps }}</div>
+        <div class="stat-label">Saltos</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-value">{{ data.vanilla.walk_km }} km</div>
+        <div class="stat-label">Caminado</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-value">{{ data.vanilla.fly_km }} km</div>
+        <div class="stat-label">Volado</div>
+      </div>
+    </div>
+
+    <!-- Gráfico de mobs + monedas -->
+    <div class="grid" style="margin-top:20px;">
+      <div class="card">
+        <h3>Top Mobs eliminados</h3>
+        <canvas id="mobsChart" height="150"></canvas>
+      </div>
+
+      {% if data.vanilla.coins %}
+      <div class="card">
+        <h3>Lightman’s Currency</h3>
+        <ul>
+          {% for coin, count in data.vanilla.coins.items() %}
+          <li>{{ coin }}: {{ count }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Servidor PebbleHost · Perfil de jugador</p>
+  </div>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('mobsChart').getContext('2d');
+    const mobsChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{ data.vanilla.top_mobs | map(attribute=0) | list | safe }},
+        datasets: [{
+          label: 'Kills',
+          data: {{ data.vanilla.top_mobs | map(attribute=1) | list | safe }},
+          backgroundColor: 'rgba(255, 99, 132, 0.6)',
+          borderRadius: 6,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#fff' } },
+          y: { ticks: { color: '#fff' }, beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+:root {
+  --bg1: #141E30;
+  --bg2: #243B55;
+  --card: rgba(255,255,255,0.06);
+  --card-strong: rgba(255,255,255,0.12);
+  --text: #fff;
+  --link: #4da6ff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: linear-gradient(135deg, var(--bg1), var(--bg2));
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: rgba(0,0,0,.25);
+  backdrop-filter: blur(8px);
+}
+.topbar a { color: #fff; margin-left: 12px; text-decoration: none; opacity:.9 }
+.topbar a:hover { opacity: 1 }
+
+.container { padding: 24px; max-width: 1100px; margin: 0 auto; }
+
+.controls { margin: 8px 0 16px; }
+.btn {
+  display: inline-block; padding: 8px 12px; margin-right: 8px;
+  background: var(--card); border-radius: 10px; text-decoration: none; color: #fff;
+}
+.btn.active { background: var(--card-strong); }
+
+.card-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.3);
+}
+.card-table thead th {
+  background: var(--card-strong);
+  padding: 12px; text-align: left;
+}
+.card-table td {
+  background: var(--card);
+  padding: 12px; border-top: 1px solid rgba(255,255,255,.08);
+}
+.link { color: var(--link); text-decoration: none; }
+.link:hover { text-decoration: underline; }
+
+.head { vertical-align: middle; border-radius: 4px; margin-right: 8px; }
+
+.player-list { list-style: none; padding: 0; margin: 12px 0; }
+.player-item {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--card); margin-bottom: 10px; padding: 10px 12px; border-radius: 12px;
+}
+.player-item.online { outline: 2px solid #43d37d; }
+.player-item .info { flex: 1; margin: 0 12px; }
+.player-item .name { font-weight: 600; }
+
+.hero { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+.avatar { border-radius: 8px; }
+.meta { opacity: .9; margin-top: 4px; }
+
+.grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+  gap: 16px;
+}
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.3);
+  padding: 16px;
+}
+
+.footer { text-align: center; padding: 24px; opacity: .7; }

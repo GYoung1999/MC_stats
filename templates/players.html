@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Jugadores{% endblock %}
+{% block content %}
+<h2>Jugadores</h2>
+
+<div class="online-summary">
+  <strong>Conectados ahora:</strong> {{ online_count }}
+  {% if online_names and online_names|length > 0 %}
+    • {{ online_names|join(", ") }}
+  {% endif %}
+</div>
+
+<ul class="player-list">
+  {% for p in players %}
+  <li class="player-item {% if p.name.lower() in online_set %}online{% endif %}">
+    <img class="head" src="https://crafatar.com/avatars/{{ p.uuid }}?size=32&overlay=1" alt="">
+    <div class="info">
+      <div class="name">{{ p.name }}</div>
+      <div class="meta">Nivel: {{ p.level if p.level is not none else '—' }} • Kills: {{ p.mob_kills }}</div>
+    </div>
+    <a class="btn" href="{{ url_for('player_profile', uuid=p.uuid) }}">Perfil</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}
